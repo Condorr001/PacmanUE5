@@ -29,7 +29,9 @@ enum class EGridPositions : uint8
 	BottomLeft,
 	BottomRight,
 	PlayerPosition,
-	Middle
+	Middle,
+	LeftTeleport,
+	RightTeleport
 };
 
 //SearchOrder 

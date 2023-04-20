@@ -41,6 +41,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pacman")
 	float ThresholdRadius = 40.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
+	EGridPositions LeftTeleport = EGridPositions::LeftTeleport;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
+	EGridPositions RightTeleport = EGridPositions::RightTeleport;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

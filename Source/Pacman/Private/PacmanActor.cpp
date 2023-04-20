@@ -4,6 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "Point.h"
 #include "Phantom.h"
+#include "PacmanGrid.h"
 #include "Components/StaticMeshComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include "DrawDebugHelpers.h"
@@ -43,7 +44,7 @@ void APacmanActor::Tick(float DeltaTime)
 	if (!bStopMovement)
 	{
 		bool bCanMove = Grid->CalculateNewDestination(CurrentDirection, Destination);
-		//If the difference between the destination and the current position is less than 1, we are on aour destination and we can stop, 
+		//If the difference between the destination and the current position is less than 1, we are on our destination and we can stop, 
 		//If not, we can continue moving
 		FVector NextPosition = GetActorLocation() + (MovementDirection * (Speed * SpeedMultiplier * DeltaTime));
 		NextPosition.Z = 0.0f;
@@ -58,6 +59,31 @@ void APacmanActor::Tick(float DeltaTime)
 		{
 			//Move component following the movement direction
 			SetActorLocation(NextPosition, true);
+		}
+
+		//Teleport managing
+		/*if (GetActorLocation() == Grid->GetGridSpecialPosition(LeftTeleport))
+		{
+			SetActorLocation(Grid->GetGridSpecialPosition(RightTeleport));
+		}
+
+		if (GetActorLocation() == Grid->GetGridSpecialPosition(RightTeleport))
+		{
+			SetActorLocation(Grid->GetGridSpecialPosition(LeftTeleport));
+		}*/
+
+		//Teleport managing
+		int XTile, YTile = 0;
+		Grid->GetTileFromWorld(GetActorLocation(), XTile, YTile);
+
+		if (XTile == 14 && YTile == 0)
+		{
+			SetActorLocation(Grid->GetGridSpecialPosition(RightTeleport));
+		}
+
+		if (XTile == 14 && YTile == 28)
+		{
+			SetActorLocation(Grid->GetGridSpecialPosition(LeftTeleport));
 		}
 	}
 }

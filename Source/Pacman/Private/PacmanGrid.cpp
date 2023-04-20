@@ -35,7 +35,7 @@ static char Map[MapSizeX][MapSizeY] = {
 	"###### ##     F    ## ######",
 	"###### ## ###NN### ## ######",
 	"###### ## #NNNNNN# ## ######",
-	"#         #NNNNNN#         #",
+	"T         #NNNNNN#         T",
 	"###### ## #NNNNNN# ## ######",
 	"###### ## ######## ## ######",
 	"###### ##    F     ## ######",
@@ -110,7 +110,7 @@ void AGrid::BeginPlay()
 				Teleport = GetWorld()->SpawnActor<ATeleport>(TeleportClass, SpawnPosition, FRotator::ZeroRotator, ActorSpawnParams);
 				Teleport->SetGrid(this);
 			}*/
-			else if(MapTile != 'N')
+			else if(MapTile != 'N' && MapTile != 'T')
 			{
 				APoint* Point = GetWorld()->SpawnActor<APoint>(PointClass, SpawnPosition, FRotator::ZeroRotator, ActorSpawnParams);
 				Point->SetSpecial(MapTile == 'B');
@@ -238,6 +238,7 @@ bool AGrid::CanMoveToTile(const int & XTile, const int & YTile)
 	return Map[XTile][YTile] != '#' && Map[XTile][YTile] != 'N';
 }
 
+
 FVector AGrid::GetGridSpecialPosition(EGridPositions GridChoice)
 {
 	int XTile, YTile = 0;
@@ -279,8 +280,23 @@ FVector AGrid::GetGridSpecialPosition(EGridPositions GridChoice)
 	{
 		XTile = MapSizeX / 2;
 		YTile = MapSizeY / 2;
-
+		break;
 	}
+
+	case EGridPositions::LeftTeleport:
+	{
+		XTile = 14;
+		YTile = 1;
+		break;
+	}
+
+	case EGridPositions::RightTeleport:
+	{
+		XTile = 14;
+		YTile = 27;
+		break;
+	}
+
 	default:
 		break;
 	}
