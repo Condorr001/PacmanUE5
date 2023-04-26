@@ -38,6 +38,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void ScatterChaseAlternation();
+
 	// Base Speed of the player
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pacman")
 	float Speed = 200.0f;
@@ -47,11 +50,12 @@ protected:
 	float SpeedMultiplier = 1.0f;
 
 	//functions and variables of Scatter-Chase alternation
-	UFUNCTION()
-	void OnScatterTimerExpired();
+	//UFUNCTION()
+	//void OnScatterTimerExpired();
 
 	UFUNCTION()
-	void OnChaseTimerExpired();
+	void OnChangeTimerExpired();
+	//void OnChaseTimerExpired();
 
 	UPROPERTY(EditAnywhere)
 	float ScatterDuration = 7.0f;
@@ -59,8 +63,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float ChaseDuration = 20.0f;
 
-	FTimerHandle ScatterTimerHandle;
-	FTimerHandle ChaseTimerHandle;
+	//FTimerHandle ScatterTimerHandle;
+	//FTimerHandle ChaseTimerHandle;
+	FTimerHandle ChangeTimerHandle;
 
 	//Position to go when Scatter State. Normally is innaccesible so we move around the area
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
@@ -69,6 +74,12 @@ protected:
 	//Position to go when Frightened State (ghosts house) and when dead
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
 	EGridPositions GhostsHouse = EGridPositions::Middle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
+	EGridPositions LeftTeleport = EGridPositions::LeftTeleport;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
+	EGridPositions RightTeleport = EGridPositions::RightTeleport;
 
 
 public:	

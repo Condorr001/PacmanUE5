@@ -29,10 +29,10 @@ static char Map[MapSizeX][MapSizeY] = {
 	"#                          #",
 	"# #### ## ######## ## #### #",
 	"# #### ## ######## ## #### #",
-	"#      ##    ##    ##   F  #",
+	"#      ##    ##    ##      #",
 	"###### ##### ## ##### ######",
 	"###### ##### ## ##### ######",
-	"###### ##     F    ## ######",
+	"###### ##  F  F F  ## ######",
 	"###### ## ###NN### ## ######",
 	"###### ## #NNNNNN# ## ######",
 	"T         #NNNNNN#         T",
@@ -41,7 +41,7 @@ static char Map[MapSizeX][MapSizeY] = {
 	"###### ##    F     ## ######",
 	"###### ## ######## ## ######",
 	"###### ## ######## ## ######",
-	"#   F        ##            #",
+	"#            ##            #",
 	"# #### ##### ## ##### #### #",
 	"# #### ##### ## ##### #### #",
 	"#B  ##       P        ##  B#",
@@ -149,6 +149,11 @@ FVector AGrid::GetWorldFromTile(const int & XTile, const int & YTile)
 	Destination.Z = 0;
 	Destination += HalfGrid;
 	return Destination;
+}
+
+char AGrid::GetTileValue(int& XTile, int& YTile)
+{
+	return Map[XTile][YTile];
 }
 
 //get the next tile in the chosen direction

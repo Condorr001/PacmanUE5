@@ -2,7 +2,7 @@
 
 #include "BlinkyPhantom.h"
 
-void ABlinkyPhantom::BeginPlay()
+/*void ABlinkyPhantom::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentState = EState::Chase;
@@ -22,4 +22,4 @@ FVector ABlinkyPhantom::GetTargetPosition()
 		}
 	}
 	return FVector();
-}
+}*/

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Phantom.h"
 #include "GameFramework/Actor.h"
 #include "Pacman/Public/PacmanGrid.h"
 #include "PacmanActor.generated.h"
@@ -79,6 +80,12 @@ public:
 	//Pacman invincibility proprerties
 	bool PacmanIsInvincible = false;
 	bool IsPacmanInvincible();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EState PhantomStateBeforeFrightened;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EState PhantomStateBeforeDead;
 
 private:
 	//Define the direction of movement of the player in X,Y. 

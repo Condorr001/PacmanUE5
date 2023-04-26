@@ -136,6 +136,9 @@ public:
 	//Return the Tile X,Y from a WorldPosition.
 	void GetTileFromWorld(const FVector& WorldPosition, int& XTile, int& YTile);
 
+	//Return the Tile char value from XTile and YTile
+	char GetTileValue(int& XTile, int& YTile);
+
 private:
 	//Return World Tile center position
 	FVector GetWorldFromTile(const int& XTile, const int& YTile);

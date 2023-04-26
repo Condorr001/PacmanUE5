@@ -30,6 +30,32 @@ void APhantom::BeginPlay()
 	Super::BeginPlay();
 	//Listen for overlaps
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &APhantom::OnOverlap);
+
+	//start scatter-chase alternation
+	//ScatterChaseAlternation();
+}
+
+void APhantom::ScatterChaseAlternation()
+{
+	switch (CurrentState)
+	{
+	case EState::Scatter:
+	{
+		//GetWorld()->GetTimerManager().SetTimer(ScatterTimerHandle, this, &APhantom::OnScatterTimerExpired, ScatterDuration, false);
+		GetWorld()->GetTimerManager().ClearTimer(ChangeTimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(ChangeTimerHandle, this, &APhantom::OnChangeTimerExpired, ScatterDuration, false);
+		break;
+	}
+	case EState::Chase:
+	{
+		//GetWorld()->GetTimerManager().SetTimer(ChaseTimerHandle, this, &APhantom::OnChaseTimerExpired, ChaseDuration, false);
+		GetWorld()->GetTimerManager().ClearTimer(ChangeTimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(ChangeTimerHandle, this, &APhantom::OnChangeTimerExpired, ChaseDuration, false);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 // Called every frame
@@ -48,6 +74,15 @@ void APhantom::Tick(float DeltaTime)
 		{
 			//Move actor to destination
 			SetActorLocation(Destination);
+
+			//Teleport managing
+			if (Grid->GetTileValue(XTileActor, YTileActor) == 'T')
+			{
+				if (YTileActor == 0)
+					SetActorLocation(Grid->GetGridSpecialPosition(RightTeleport));
+				else
+					SetActorLocation(Grid->GetGridSpecialPosition(LeftTeleport));
+			}
 
 			//Get next destination and movement
 			Destination = Grid->GetNextDestination( GetTargetPosition(), GetActorLocation(), MovementDir, NextMovementDir);
@@ -117,7 +152,7 @@ void APhantom::ChangeDirection()
 }
 
 //Scatter and Chase alternation
-void APhantom::OnScatterTimerExpired()
+/*void APhantom::OnScatterTimerExpired()
 {
 	TArray<AActor*> Phantoms;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
@@ -127,6 +162,7 @@ void APhantom::OnScatterTimerExpired()
 		if (Phantom)
 		{
 			Phantom->ChangeState(EState::Chase);
+			Phantom->ScatterChaseAlternation();
 		}
 	}
 }
@@ -141,6 +177,26 @@ void APhantom::OnChaseTimerExpired()
 		if (Phantom)
 		{
 			Phantom->ChangeState(EState::Scatter);
+			Phantom->ScatterChaseAlternation();
+		}
+	}
+}*/
+
+void APhantom::OnChangeTimerExpired()
+{
+	TArray<AActor*> Phantoms;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
+	for (AActor* Actor : Phantoms)
+	{
+		APhantom* Phantom = Cast<APhantom>(Actor);
+		if (Phantom)
+		{
+			if(Phantom->GetState() == EState::Scatter)
+				Phantom->ChangeState(EState::Chase);
+			else
+				Phantom->ChangeState(EState::Scatter);
+
+			Phantom->ScatterChaseAlternation();
 		}
 	}
 }
@@ -152,21 +208,15 @@ FVector APhantom::GetTargetPosition()
 	{
 	case EState::Chase:
 	{
-		//normally following Pacman, so no changes
-
-		GetWorld()->GetTimerManager().SetTimer(ChaseTimerHandle, this, &APhantom::OnChaseTimerExpired, ChaseDuration, false);
+		SetSpeedMultiplier(1.0f);
+		return Grid->GetGridSpecialPosition(EGridPositions::PlayerPosition);
 		break;
 	}
 	case EState::Scatter:
 	{
-		if (Grid)
-		{
-			DrawDebugSphere(GetWorld(), Grid->GetGridSpecialPosition(ScatterPosition), 20.0f, 32, FColor::Green, false, 1.0f);
-			SetSpeedMultiplier(1.0f);
-			return Grid->GetGridSpecialPosition(ScatterPosition);
-
-			GetWorld()->GetTimerManager().SetTimer(ScatterTimerHandle, this, &APhantom::OnScatterTimerExpired, ScatterDuration, false);
-		}
+		//DrawDebugSphere(GetWorld(), Grid->GetGridSpecialPosition(ScatterPosition), 20.0f, 32, FColor::Green, false, 1.0f);
+		SetSpeedMultiplier(1.0f);
+		return Grid->GetGridSpecialPosition(ScatterPosition);
 		break;
 	}
 	case EState::Frightened:

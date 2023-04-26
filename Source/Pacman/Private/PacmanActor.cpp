@@ -62,17 +62,6 @@ void APacmanActor::Tick(float DeltaTime)
 		}
 
 		//Teleport managing
-		/*if (GetActorLocation() == Grid->GetGridSpecialPosition(LeftTeleport))
-		{
-			SetActorLocation(Grid->GetGridSpecialPosition(RightTeleport));
-		}
-
-		if (GetActorLocation() == Grid->GetGridSpecialPosition(RightTeleport))
-		{
-			SetActorLocation(Grid->GetGridSpecialPosition(LeftTeleport));
-		}*/
-
-		//Teleport managing
 		int XTile, YTile = 0;
 		Grid->GetTileFromWorld(GetActorLocation(), XTile, YTile);
 
@@ -115,9 +104,8 @@ void APacmanActor::OnSpeedBoostTimerExpired()
 		APhantom* Phantom = Cast<APhantom>(Actor);
 		if (Phantom)
 		{
-			Phantom->ChangeState(EState::Scatter);
-			//same thing, changing the direction triggers something in one random ghosts and it stops behaving as it's supposed to
-			//Phantom->ChangeDirection();
+			//Phantom->ChangeState(EState::Scatter);
+			Phantom->ChangeState(PhantomStateBeforeFrightened);
 		}
 	}
 }
@@ -131,7 +119,8 @@ void APacmanActor::OnDeadTimerExpired()
 		APhantom* Phantom = Cast<APhantom>(Actor);
 		if (Phantom->GetState() == EState::Dead)
 		{
-			Phantom->ChangeState(EState::Scatter);
+			//Phantom->ChangeState(EState::Scatter);
+			Phantom->ChangeState(PhantomStateBeforeDead);
 		}
 	}
 }
@@ -153,14 +142,13 @@ void APacmanActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 				APhantom* Phantom = Cast<APhantom>(Actor);
 				if (Phantom)
 				{
+					PhantomStateBeforeFrightened = Phantom->GetState();
 					Phantom->ChangeState(EState::Frightened);
-
-					//same thing, changing the direction triggers something in one random ghosts and it stops behaving as it's supposed to
-					//Phantom->ChangeDirection();
 				}
 			}
 
 			GetWorld()->GetTimerManager().SetTimer(SpeedBoostTimerHandle, this, &APacmanActor::OnSpeedBoostTimerExpired, SpeedBoostDuration, false);
+			
 		}
 	}
 	else if (OtherActor->IsA(APhantom::StaticClass()))
@@ -168,20 +156,13 @@ void APacmanActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		APhantom* Phantom = Cast<APhantom>(OtherActor);
 		if (PacmanIsInvincible)
 		{
-			//Phantom->Destroy();
-	
+			PhantomStateBeforeDead = Phantom->GetState();
 			Phantom->ChangeState(EState::Dead);
 
 			GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, this, &APacmanActor::OnDeadTimerExpired, DeadDuration, false);
 		}
 
 	}
-	//else
-	//{
-	//	bStopMovement = true;
-	//	//Move Slighly back the capsule in the inverse direction to capture new overlaps
-	//	SetActorLocation(GetActorLocation() + (MovementDirection * -2.0f), true);
-	//}
 
 }
 
