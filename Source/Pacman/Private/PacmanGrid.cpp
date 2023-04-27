@@ -16,6 +16,7 @@
 // F - Phantom
 // F - Cherry
 // T - Teleport
+// L - No Food
 
 const int MapSizeX = 30;
 const int MapSizeY = 29;
@@ -30,17 +31,17 @@ static char Map[MapSizeX][MapSizeY] = {
 	"# #### ## ######## ## #### #",
 	"# #### ## ######## ## #### #",
 	"#      ##    ##    ##      #",
-	"###### ##### ## ##### ######",
-	"###### ##### ## ##### ######",
-	"###### ##  F  F F  ## ######",
-	"###### ## ###NN### ## ######",
-	"###### ## #NNNNNN# ## ######",
-	"T         #NNNNNN#         T",
-	"###### ## #NNNNNN# ## ######",
-	"###### ## ######## ## ######",
-	"###### ##    F     ## ######",
-	"###### ## ######## ## ######",
-	"###### ## ######## ## ######",
+	"###### #####L##L##### ######",
+	"###### #####L##L##### ######",
+	"###### ##LLFLLFLFLL## ######",
+	"###### ##L###NN###L## ######",
+	"###### ##L#NNNNNN#L## ######",
+	"TLLLLL LLL#NNNNNN#LLL LLLLLT",
+	"###### ##L#NNNNNN#L## ######",
+	"###### ##L########L## ######",
+	"###### ##LLLLFLLLLL## ######",
+	"###### ##L########L## ######",
+	"###### ##L########L## ######",
 	"#            ##            #",
 	"# #### ##### ## ##### #### #",
 	"# #### ##### ## ##### #### #",
@@ -51,7 +52,7 @@ static char Map[MapSizeX][MapSizeY] = {
 	"# ########## ## ########## #",
 	"#                          #",
 	"############################",
-	};
+};
 
 
 
@@ -110,7 +111,7 @@ void AGrid::BeginPlay()
 				Teleport = GetWorld()->SpawnActor<ATeleport>(TeleportClass, SpawnPosition, FRotator::ZeroRotator, ActorSpawnParams);
 				Teleport->SetGrid(this);
 			}*/
-			else if(MapTile != 'N' && MapTile != 'T')
+			else if(MapTile != 'N' && MapTile != 'T' && MapTile != 'L')
 			{
 				APoint* Point = GetWorld()->SpawnActor<APoint>(PointClass, SpawnPosition, FRotator::ZeroRotator, ActorSpawnParams);
 				Point->SetSpecial(MapTile == 'B');

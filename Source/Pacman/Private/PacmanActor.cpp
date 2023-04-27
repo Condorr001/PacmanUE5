@@ -7,6 +7,7 @@
 #include "PacmanGrid.h"
 #include "Components/StaticMeshComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Sound/SoundWave.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -141,6 +142,7 @@ void APacmanActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		APhantom* Phantom = Cast<APhantom>(OtherActor);
 		if (PacmanIsInvincible)
 		{
+			UGameplayStatics::PlaySound2D(this, eat_ghost);
 			PhantomStateBeforeDead = Phantom->GetState();
 			Phantom->ChangeState(EState::Dead);
 		}

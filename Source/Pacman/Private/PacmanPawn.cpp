@@ -33,6 +33,7 @@ void APacmanPawn::UpInput()
 	if (PacmanActor)
 	{
 		PacmanActor->SetMovement(EDirection::Up);
+		PacmanActor->SetActorRotation(FRotator(0, 270, 0));
 	}
 }
 
@@ -42,6 +43,7 @@ void APacmanPawn::DownInput()
 	if (PacmanActor)
 	{
 		PacmanActor->SetMovement(EDirection::Down);
+		PacmanActor->SetActorRotation(FRotator(0, 90, 0));
 	}
 }
 
@@ -51,6 +53,7 @@ void APacmanPawn::RightInput()
 	if (PacmanActor)
 	{
 		PacmanActor->SetMovement(EDirection::Right);
+		PacmanActor->SetActorRotation(FRotator(0, 0, 0));
 	}
 }
 
@@ -60,6 +63,7 @@ void APacmanPawn::LeftInput()
 	if (PacmanActor)
 	{
 		PacmanActor->SetMovement(EDirection::Left);
+		PacmanActor->SetActorRotation(FRotator(0, 180, 180));
 	}
 }
 

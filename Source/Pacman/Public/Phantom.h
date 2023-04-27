@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundWave.h"
 #include "GameFramework/Actor.h"
 #include "PacmanGrid.h"
 #include "Phantom.generated.h"
@@ -62,7 +64,7 @@ protected:
 	FTimerHandle ScatterTimerHandle;
 	//FTimerHandle ChaseTimerHandle;
 
-	//Position to go when Scatter State. Normally is innaccesible so we move around the area
+	//Position to go when Scatter State
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
 	EGridPositions ScatterPosition = EGridPositions::TopLeft;
 
@@ -70,6 +72,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
 	EGridPositions GhostsHouse = EGridPositions::Middle;
 
+	//Teleport positions
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")
 	EGridPositions LeftTeleport = EGridPositions::LeftTeleport;
 
@@ -85,11 +88,17 @@ public:
 
 	void SetStartDirection(FVector StartDirection) { MovementDir = StartDirection; }
 
+	//Change Phantom state
 	void ChangeState(EState NewState);
 
+	//Change Phantom speed by scaling the speed multiplier
 	void SetSpeedMultiplier(float Value);
 
+	//Get Phantom state
 	EState GetState();
+
+	//Change ScatterPosition for each phantom
+	void ChangeScatterPosition(EGridPositions NewPosition);
 
 	//Called when a actor overlaps something
 	UFUNCTION()
@@ -120,5 +129,9 @@ protected:
 
 	int XTileDestination = 0;
 	int YTileDestination = 0;
+
+private:
+	UPROPERTY(EditAnywhere)
+	USoundWave* minuslife;
 
 };

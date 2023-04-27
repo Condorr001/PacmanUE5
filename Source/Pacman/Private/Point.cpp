@@ -2,6 +2,8 @@
 
 #include "Point.h"
 #include "PacmanGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundWave.h"
 
 // Sets default values
 APoint::APoint()
@@ -18,6 +20,7 @@ void APoint::Eat()
 	//Notify the game mode the number of points gained and if this point is enabled
 	if (APacmanGameModeBase* GameMode = Cast<APacmanGameModeBase>(GetWorld()->GetAuthGameMode()))
 	{
+		UGameplayStatics::PlaySound2D(this, pacman_food);
 		GameMode->PointEat(bIsSpecial);
 		Destroy();
 	}

@@ -38,11 +38,11 @@ public:
 
 	// Value added to score when one normal point is eaten
 	UPROPERTY(EditAnywhere, Category = "Score")
-		float NormalPointsValue = 1.0f;
+		float NormalPointsValue = 10.0f;
 
 	// Value added to score when one special point is eaten
 	UPROPERTY(EditAnywhere, Category = "Score")
-		float SpecialPointsValue = 100.0f;
+		float SpecialPointsValue = 50.0f;
 
 	// Seconds to be on "Eat Mode" for pacman
 	UPROPERTY(EditAnywhere, Category = "Score")

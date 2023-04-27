@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Phantom.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundWave.h"
 #include "GameFramework/Actor.h"
 #include "Pacman/Public/PacmanGrid.h"
 #include "PacmanActor.generated.h"
@@ -103,4 +105,7 @@ private:
 
 	//Player Destination, normally a center of a Tile
 	FVector Destination = FVector::ZeroVector;
+
+	UPROPERTY(EditAnywhere)
+	USoundWave* eat_ghost;
 };

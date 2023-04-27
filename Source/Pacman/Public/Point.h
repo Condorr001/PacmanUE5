@@ -3,8 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundWave.h"
 #include "GameFramework/Actor.h"
 #include "Point.generated.h"
+
+class USoundWave;
 
 /*
  Points in the world to increase score
@@ -38,5 +42,9 @@ protected:
 	// scale used when point is special
 	UPROPERTY(EditAnywhere, Category = "Pacman")
 	float SpecialScale= 0.6;
+
+private:
+	UPROPERTY(EditAnywhere)
+	USoundWave* pacman_food;
 
 };
