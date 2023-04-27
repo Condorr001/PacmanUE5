@@ -38,9 +38,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void ScatterChaseAlternation();
-
 	// Base Speed of the player
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pacman")
 	float Speed = 200.0f;
@@ -50,11 +47,10 @@ protected:
 	float SpeedMultiplier = 1.0f;
 
 	//functions and variables of Scatter-Chase alternation
-	//UFUNCTION()
-	//void OnScatterTimerExpired();
-
 	UFUNCTION()
-	void OnChangeTimerExpired();
+	void OnScatterTimerExpired();
+
+	//UFUNCTION()
 	//void OnChaseTimerExpired();
 
 	UPROPERTY(EditAnywhere)
@@ -63,9 +59,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float ChaseDuration = 20.0f;
 
-	//FTimerHandle ScatterTimerHandle;
+	FTimerHandle ScatterTimerHandle;
 	//FTimerHandle ChaseTimerHandle;
-	FTimerHandle ChangeTimerHandle;
 
 	//Position to go when Scatter State. Normally is innaccesible so we move around the area
 	UPROPERTY(EditDefaultsOnly, Category = "Pacman")

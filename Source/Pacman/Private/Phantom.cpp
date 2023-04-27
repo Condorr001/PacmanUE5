@@ -32,30 +32,7 @@ void APhantom::BeginPlay()
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &APhantom::OnOverlap);
 
 	//start scatter-chase alternation
-	//ScatterChaseAlternation();
-}
-
-void APhantom::ScatterChaseAlternation()
-{
-	switch (CurrentState)
-	{
-	case EState::Scatter:
-	{
-		//GetWorld()->GetTimerManager().SetTimer(ScatterTimerHandle, this, &APhantom::OnScatterTimerExpired, ScatterDuration, false);
-		GetWorld()->GetTimerManager().ClearTimer(ChangeTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(ChangeTimerHandle, this, &APhantom::OnChangeTimerExpired, ScatterDuration, false);
-		break;
-	}
-	case EState::Chase:
-	{
-		//GetWorld()->GetTimerManager().SetTimer(ChaseTimerHandle, this, &APhantom::OnChaseTimerExpired, ChaseDuration, false);
-		GetWorld()->GetTimerManager().ClearTimer(ChangeTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(ChangeTimerHandle, this, &APhantom::OnChangeTimerExpired, ChaseDuration, false);
-		break;
-	}
-	default:
-		break;
-	}
+	GetWorld()->GetTimerManager().SetTimer(ScatterTimerHandle, this, &APhantom::OnScatterTimerExpired, ScatterDuration, false);
 }
 
 // Called every frame
@@ -97,6 +74,15 @@ void APhantom::Tick(float DeltaTime)
 		//never moving in the z axis
 		NextPosition.Z = 0;
 		SetActorLocation(NextPosition, true);
+	}
+
+	if (GetState() == EState::Dead)
+	{
+		int XTileDead = 0, YTileDead = 0;
+		Grid->GetTileFromWorld(GetActorLocation(), XTileDead, YTileDead);
+
+		if (XTileDead == 11 && YTileDead == 13)
+			ChangeState(EState::Chase);
 	}
 }
 
@@ -152,54 +138,11 @@ void APhantom::ChangeDirection()
 }
 
 //Scatter and Chase alternation
-/*void APhantom::OnScatterTimerExpired()
+void APhantom::OnScatterTimerExpired()
 {
-	TArray<AActor*> Phantoms;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
-	for (AActor* Actor : Phantoms)
-	{
-		APhantom* Phantom = Cast<APhantom>(Actor);
-		if (Phantom)
-		{
-			Phantom->ChangeState(EState::Chase);
-			Phantom->ScatterChaseAlternation();
-		}
-	}
+	ChangeState(EState::Chase);
 }
 
-void APhantom::OnChaseTimerExpired()
-{
-	TArray<AActor*> Phantoms;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
-	for (AActor* Actor : Phantoms)
-	{
-		APhantom* Phantom = Cast<APhantom>(Actor);
-		if (Phantom)
-		{
-			Phantom->ChangeState(EState::Scatter);
-			Phantom->ScatterChaseAlternation();
-		}
-	}
-}*/
-
-void APhantom::OnChangeTimerExpired()
-{
-	TArray<AActor*> Phantoms;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
-	for (AActor* Actor : Phantoms)
-	{
-		APhantom* Phantom = Cast<APhantom>(Actor);
-		if (Phantom)
-		{
-			if(Phantom->GetState() == EState::Scatter)
-				Phantom->ChangeState(EState::Chase);
-			else
-				Phantom->ChangeState(EState::Scatter);
-
-			Phantom->ScatterChaseAlternation();
-		}
-	}
-}
 
 //different target for different states (Pacman for Scatter state, ghosts house for Frightened state)
 FVector APhantom::GetTargetPosition()

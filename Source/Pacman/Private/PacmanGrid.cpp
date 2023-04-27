@@ -283,8 +283,8 @@ FVector AGrid::GetGridSpecialPosition(EGridPositions GridChoice)
 	}
 	case EGridPositions::Middle:
 	{
-		XTile = MapSizeX / 2;
-		YTile = MapSizeY / 2;
+		XTile = 11;
+		YTile = 13;
 		break;
 	}
 

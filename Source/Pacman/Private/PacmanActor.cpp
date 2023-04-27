@@ -104,23 +104,8 @@ void APacmanActor::OnSpeedBoostTimerExpired()
 		APhantom* Phantom = Cast<APhantom>(Actor);
 		if (Phantom)
 		{
-			//Phantom->ChangeState(EState::Scatter);
-			Phantom->ChangeState(PhantomStateBeforeFrightened);
-		}
-	}
-}
-
-void APacmanActor::OnDeadTimerExpired()
-{
-	TArray<AActor*> Phantoms;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APhantom::StaticClass(), Phantoms);
-	for (AActor* Actor : Phantoms)
-	{
-		APhantom* Phantom = Cast<APhantom>(Actor);
-		if (Phantom->GetState() == EState::Dead)
-		{
-			//Phantom->ChangeState(EState::Scatter);
-			Phantom->ChangeState(PhantomStateBeforeDead);
+			if(Phantom->GetState() != EState::Dead)
+				Phantom->ChangeState(PhantomStateBeforeFrightened);
 		}
 	}
 }
@@ -158,8 +143,6 @@ void APacmanActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		{
 			PhantomStateBeforeDead = Phantom->GetState();
 			Phantom->ChangeState(EState::Dead);
-
-			GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, this, &APacmanActor::OnDeadTimerExpired, DeadDuration, false);
 		}
 
 	}
